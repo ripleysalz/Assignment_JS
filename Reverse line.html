@@ -1,0 +1,81 @@
+
+
+<div id="container"></div>
+
+<script src="26b39.js"></script>
+<script src="26b41.js"></script>
+<script src="26b43.js"></script>
+
+<script>
+  // 1. Inisialisasi Container & Element
+  const cnt = getContainer("container", "700px");
+  const inTxa = createTextarea("text-input", "15em");
+  const outTxa = createTextarea("text-output", "15em");
+  const btnDiv = createDiv("button-container");
+
+  // 2. Buat Tombol dengan Label yang lebih jelas
+  const deBtn = createButton("de-button", "📄 Fill Sample Data");
+  const rvBtn = createButton("rv-button", "🔄 Reverse Each Line");
+  const owBtn = createButton("ow-button", "➡️ Copy to Output");
+  const ppBtn = createButton("pp-button", "📥 Pop Line to Output");
+  const clBtn = createButton("cl-button", "🧹 Clear All Screens");
+
+  // 3. Susun Hirarki
+  cnt.append(inTxa);
+  cnt.append(btnDiv);
+  cnt.append(outTxa);
+
+  btnDiv.append(deBtn);
+  btnDiv.append(rvBtn);
+  btnDiv.append(owBtn);
+  btnDiv.append(ppBtn);
+  btnDiv.append(clBtn);
+
+  // 4. Pengaturan Flex
+  changeElementsFlex(
+    ["text-input", "4"],
+    ["button-container", "2"],
+    ["text-output", "4"]
+  );
+
+  // 5. Konfigurasi Consolex
+  consolex.setOutput(outTxa);
+  consolex.setEOL("");
+
+  // 6. Logic Event Listeners
+  deBtn.addEventListener("click", () => {
+    inTxa.value = "User Data: Alpha\nUser Data: Bravo\nUser Data: Charlie\nUser Data: Delta";
+  });
+
+  // Fitur Modifikasi: Membalikkan teks per baris
+  rvBtn.addEventListener("click", () => {
+    if(!inTxa.value) return;
+    const lines = inTxa.value.split("\n");
+    const reversed = lines.map(l => l.split("").reverse().join(""));
+    outTxa.value = reversed.join("\n");
+  });
+
+  owBtn.addEventListener("click", () => {
+    copyTextareaFromTo("text-input", "text-output"); //
+  });
+
+  ppBtn.addEventListener("click", () => {
+    let inLines = inTxa.value.split("\n").filter(l => l !== "");
+    let outLines = outTxa.value.split("\n").filter(l => l !== "");
+
+    if(inLines.length > 0) {
+      const item = inLines.pop();
+      outLines.push(item);
+      inTxa.value = inLines.join("\n");
+      outTxa.value = outLines.join("\n");
+      outTxa.scrollTop = outTxa.scrollHeight; // Auto scroll
+    }
+  });
+
+  clBtn.addEventListener("click", () => {
+    clearTextarea("text-input"); //
+    clearTextarea("text-output");
+  });
+</script>
+</body>
+</html>
